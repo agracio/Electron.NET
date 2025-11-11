@@ -87,7 +87,7 @@ namespace ElectronNET.API
         /// <param name="type"></param>
         public void WriteRTF(string text, string type = "")
         {
-            BridgeConnector.Socket.Emit("clipboard-writeHTML", text, type);
+            BridgeConnector.Socket.Emit("clipboard-writeRTF", text, type);
         }
 
         /// <summary>

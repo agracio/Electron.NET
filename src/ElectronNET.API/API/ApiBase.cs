@@ -32,13 +32,15 @@ namespace ElectronNET.API
         private const int PropertyTimeout = 1000;
 
         private readonly string objectName;
-        private readonly ConcurrentDictionary<string, PropertyGetter> propertyGetters = new();
+        private readonly ConcurrentDictionary<string, PropertyGetter> propertyGetters;
         private readonly ConcurrentDictionary<string, string> propertyEventNames = new();
         private readonly ConcurrentDictionary<string, string> propertyMessageNames = new();
         private readonly ConcurrentDictionary<string, string> methodMessageNames = new();
         private static readonly ConcurrentDictionary<string, EventContainer> eventContainers = new();
+        private static readonly ConcurrentDictionary<string, ConcurrentDictionary<string, PropertyGetter>> AllPropertyGetters = new();
 
         private readonly object objLock = new object();
+
 
         public virtual int Id
         {
@@ -57,6 +59,7 @@ namespace ElectronNET.API
         protected ApiBase()
         {
             this.objectName = this.GetType().Name.LowerFirst();
+            propertyGetters = AllPropertyGetters.GetOrAdd(objectName, _ => new ConcurrentDictionary<string, PropertyGetter>());
         }
 
         protected void CallMethod0([CallerMemberName] string callerName = null)

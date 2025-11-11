@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 
 namespace ElectronNET.API;
 
-using ElectronNET.Common;
-using System.Text.Json;
-
 /// <summary>
 /// Create and control browser windows.
 /// </summary>

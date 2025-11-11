@@ -1,6 +1,4 @@
 using ElectronNET.API.Entities;
-using ElectronNET.API.Serialization;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ElectronNET.API

@@ -1,5 +1,4 @@
 using ElectronNET.API.Entities;
-using ElectronNET.API.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

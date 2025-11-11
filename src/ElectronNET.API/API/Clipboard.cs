@@ -8,8 +8,11 @@ namespace ElectronNET.API
     /// <summary>
     /// Perform copy and paste operations on the system clipboard.
     /// </summary>
-    public sealed class Clipboard
+    public sealed class Clipboard: ApiBase
     {
+        protected override SocketTaskEventNameTypes SocketTaskEventNameType => SocketTaskEventNameTypes.DashesLowerFirst;
+        protected override SocketTaskMessageNameTypes SocketTaskMessageNameType => SocketTaskMessageNameTypes.DashesLowerFirst;
+
         private static Clipboard _clipboard;
         private static object _syncRoot = new object();
 
@@ -41,21 +44,7 @@ namespace ElectronNET.API
         /// </summary>
         /// <param name="type"></param>
         /// <returns>The content in the clipboard as plain text.</returns>
-        public Task<string> ReadTextAsync(string type = "")
-        {
-            var taskCompletionSource = new TaskCompletionSource<string>();
-
-            BridgeConnector.Socket.On<string>("clipboard-readText-Completed", (text) =>
-            {
-                BridgeConnector.Socket.Off("clipboard-readText-Completed");
-
-                taskCompletionSource.SetResult(text);
-            });
-
-            BridgeConnector.Socket.Emit("clipboard-readText", type);
-
-            return taskCompletionSource.Task;
-        }
+        public Task<string> ReadTextAsync(string type = "") => GetPropertyAsync<string>(type);
 
         /// <summary>
         /// Writes the text into the clipboard as plain text.
@@ -72,21 +61,7 @@ namespace ElectronNET.API
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Task<string> ReadHTMLAsync(string type = "")
-        {
-            var taskCompletionSource = new TaskCompletionSource<string>();
-
-            BridgeConnector.Socket.On<string>("clipboard-readHTML-Completed", (text) =>
-            {
-                BridgeConnector.Socket.Off("clipboard-readHTML-Completed");
-
-                taskCompletionSource.SetResult(text);
-            });
-
-            BridgeConnector.Socket.Emit("clipboard-readHTML", type);
-
-            return taskCompletionSource.Task;
-        }
+        public Task<string> ReadHTMLAsync(string type = "") => GetPropertyAsync<string>(type);
 
         /// <summary>
         /// Writes markup to the clipboard.
@@ -103,21 +78,7 @@ namespace ElectronNET.API
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Task<string> ReadRTFAsync(string type = "")
-        {
-            var taskCompletionSource = new TaskCompletionSource<string>();
-
-            BridgeConnector.Socket.On<string>("clipboard-readRTF-Completed", (text) =>
-            {
-                BridgeConnector.Socket.Off("clipboard-readRTF-Completed");
-
-                taskCompletionSource.SetResult(text);
-            });
-
-            BridgeConnector.Socket.Emit("clipboard-readRTF", type);
-
-            return taskCompletionSource.Task;
-        }
+        public Task<string> ReadRTFAsync(string type = "") => GetPropertyAsync<string>(type);
 
         /// <summary>
         /// Writes the text into the clipboard in RTF.
@@ -135,20 +96,7 @@ namespace ElectronNET.API
         /// be empty strings when the bookmark is unavailable.
         /// </summary>
         /// <returns></returns>
-        public Task<ReadBookmark> ReadBookmarkAsync()
-        {
-            var taskCompletionSource = new TaskCompletionSource<ReadBookmark>();
-
-            BridgeConnector.Socket.On<ReadBookmark>("clipboard-readBookmark-Completed", (result) =>
-            {
-                BridgeConnector.Socket.Off("clipboard-readBookmark-Completed");
-                taskCompletionSource.SetResult(result);
-            });
-
-            BridgeConnector.Socket.Emit("clipboard-readBookmark");
-
-            return taskCompletionSource.Task;
-        }
+        public Task<ReadBookmark> ReadBookmarkAsync() => GetPropertyAsync<ReadBookmark>();
 
         /// <summary>
         /// Writes the title and url into the clipboard as a bookmark.
@@ -171,20 +119,7 @@ namespace ElectronNET.API
         /// find pasteboard whenever the application is activated.
         /// </summary>
         /// <returns></returns>
-        public Task<string> ReadFindTextAsync()
-        {
-            var taskCompletionSource = new TaskCompletionSource<string>();
-
-            BridgeConnector.Socket.On<string>("clipboard-readFindText-Completed", (text) =>
-            {
-                BridgeConnector.Socket.Off("clipboard-readFindText-Completed");
-                taskCompletionSource.SetResult(text);
-            });
-
-            BridgeConnector.Socket.Emit("clipboard-readFindText");
-
-            return taskCompletionSource.Task;
-        }
+        public Task<string> ReadFindTextAsync() => GetPropertyAsync<string>();
 
         /// <summary>
         /// macOS: Writes the text into the find pasteboard as plain text. This method uses 
@@ -210,20 +145,7 @@ namespace ElectronNET.API
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Task<string[]> AvailableFormatsAsync(string type = "")
-        {
-            var taskCompletionSource = new TaskCompletionSource<string[]>();
-
-            BridgeConnector.Socket.On<string[]>("clipboard-availableFormats-Completed", (formats) =>
-            {
-                BridgeConnector.Socket.Off("clipboard-availableFormats-Completed");
-                taskCompletionSource.SetResult(formats);
-            });
-
-            BridgeConnector.Socket.Emit("clipboard-availableFormats", type);
-
-            return taskCompletionSource.Task;
-        }
+        public Task<string[]> AvailableFormatsAsync(string type = "") => GetPropertyAsync<string[]>(type);
 
         /// <summary>
         /// Writes data to the clipboard.
@@ -240,20 +162,7 @@ namespace ElectronNET.API
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Task<NativeImage> ReadImageAsync(string type = "")
-        {
-            var taskCompletionSource = new TaskCompletionSource<NativeImage>();
-
-            BridgeConnector.Socket.On<NativeImage>("clipboard-readImage-Completed", (result) =>
-            {
-                BridgeConnector.Socket.Off("clipboard-readImage-Completed");
-                taskCompletionSource.SetResult(result);
-            });
-
-            BridgeConnector.Socket.Emit("clipboard-readImage", type);
-
-            return taskCompletionSource.Task;
-        }
+        public Task<NativeImage> ReadImageAsync(string type = "") => GetPropertyAsync<NativeImage>(type);
 
         /// <summary>
         /// Writes an image to the clipboard.

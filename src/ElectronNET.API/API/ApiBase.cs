@@ -52,7 +52,7 @@ namespace ElectronNET.API
 
         protected abstract SocketTaskEventNameTypes SocketTaskEventNameType { get; }
         protected virtual SocketTaskMessageNameTypes SocketTaskMessageNameType => SocketTaskMessageNameTypes.NoDashUpperFirst;
-        protected abstract SocketEventNameTypes SocketEventNameType { get; }
+        protected virtual SocketEventNameTypes SocketEventNameType => SocketEventNameTypes.DashedLower;
 
         protected ApiBase()
         {

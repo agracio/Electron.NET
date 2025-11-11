@@ -1,3 +1,5 @@
+using ElectronNET.API.Entities;
+
 namespace ElectronNET.IntegrationTests.Tests
 {
     using ElectronNET.API;

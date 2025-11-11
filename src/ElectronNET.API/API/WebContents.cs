@@ -20,7 +20,7 @@ public class WebContents: ApiBase
     /// <value>
     /// The identifier.
     /// </value>
-    public int Id { get; private set; }
+    public override int Id { get; protected set; }
 
     /// <summary>
     /// Manage browser sessions, cookies, cache, proxy settings, etc.

@@ -12,6 +12,7 @@ namespace ElectronNET.API;
 public class WebContents: ApiBase
 {
     protected override SocketTaskEventNameTypes SocketTaskEventNameType => SocketTaskEventNameTypes.DashesLowerFirst;
+    protected override SocketTaskMessageNameTypes SocketTaskMessageNameType => SocketTaskMessageNameTypes.DashesLowerFirst;
     protected override SocketEventNameTypes SocketEventNameType => SocketEventNameTypes.CamelCase;
 
     /// <summary>
@@ -138,47 +139,19 @@ public class WebContents: ApiBase
     /// Get system printers.
     /// </summary>
     /// <returns>printers</returns>
-    public Task<PrinterInfo[]> GetPrintersAsync()
-    {
-        var taskCompletionSource = new TaskCompletionSource<PrinterInfo[]>();
-
-        BridgeConnector.Socket.On<PrinterInfo[]>("webContents-getPrinters-completed", (printers) =>
-        {
-            BridgeConnector.Socket.Off("webContents-getPrinters-completed");
-            taskCompletionSource.SetResult(printers);
-        });
-
-        BridgeConnector.Socket.Emit("webContents-getPrinters", Id);
-
-        return taskCompletionSource.Task;
-    }
+    public Task<PrinterInfo[]> GetPrintersAsync() => GetPropertyAsync<PrinterInfo[]>();
 
     /// <summary>
     /// Prints window's web page.
     /// </summary>
     /// <param name="options"></param>
     /// <returns>success</returns>
-    public Task<bool> PrintAsync(PrintOptions options = null)
-    {
-        var taskCompletionSource = new TaskCompletionSource<bool>();
-
-        BridgeConnector.Socket.On<bool>("webContents-print-completed", (success) =>
-        {
-            BridgeConnector.Socket.Off("webContents-print-completed");
-            taskCompletionSource.SetResult(success);
-        });
-
-        if (options == null)
-        {
-            BridgeConnector.Socket.Emit("webContents-print", Id, "");
-        }
-        else
-        {
-            BridgeConnector.Socket.Emit("webContents-print", Id, options);
-        }
-
-        return taskCompletionSource.Task;
-    }
+    public Task<bool> PrintAsync(PrintOptions options) => GetPropertyAsync<bool>(options);
+    /// <summary>
+    /// Prints window's web page.
+    /// </summary>
+    /// <returns>success</returns>
+    public Task<bool> PrintAsync() => GetPropertyAsync<bool>(string.Empty);
 
     /// <summary>
     /// Prints window's web page as PDF with Chromium's preview printing custom
@@ -326,6 +299,4 @@ public class WebContents: ApiBase
     {
         BridgeConnector.Socket.Emit("webContents-insertCSS", Id, isBrowserWindow, path);
     }
-
-
 }
